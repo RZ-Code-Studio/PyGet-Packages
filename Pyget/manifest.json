@@ -2,5 +2,6 @@
     "version": 1.0,
     "installed": true,
     "source": "https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/Pyget/source.py",
-    "requirements": "https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/Pyget/requirements.txt"
+    "requirements": "https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/Pyget/requirements.txt",
+    "name": "PyGet"
 }
