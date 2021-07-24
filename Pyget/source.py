@@ -22,7 +22,7 @@ help                   Displays this message
 def installPackagesFromManifest(manifest, installDir):
     sourceCode = requests.get(manifest["source"]).json()
     print(sourceCode) # For now
-    with open(installDir + manifest["filename"], "wb") as file:
+    with open(installDir + manifest["name"], "wb") as file:
         file.write(sourceCode)
 
 def searchForManifest(property, value):
