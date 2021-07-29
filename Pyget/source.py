@@ -20,8 +20,7 @@ help                   Displays this message
 """
 
 def installPackagesFromManifest(manifest, installDir):
-    sourceCode = requests.get(manifest["source"]).json()
-    print(sourceCode) # For now
+    sourceCode = requests.get(manifest["source"]).text
     with open(installDir + manifest["name"], "wb") as file:
         file.write(sourceCode)
 
@@ -33,7 +32,6 @@ if os.path.isfile("packages.json"):
         contents = file.read()
 elif not os.path.isfile("packages.json"):
     contents = requests.get("").json()
-    print(contents) # For now
     with open("packages.json", "w") as file:
         file.write(contents)
 
