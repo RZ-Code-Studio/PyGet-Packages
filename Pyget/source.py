@@ -19,6 +19,12 @@ uninstall <package>    Uninstalls <package>
 help                   Displays this message
 """
 
+PACKAGES_JSON_STRUCTURE = """{
+    "pyget": {
+        "version": 1.0,
+    }
+"""
+
 def installPackagesFromManifest(manifest, installDir):
     sourceCode = requests.get(manifest["source"]).text
     with open(installDir + manifest["name"], "wb") as file:
@@ -31,9 +37,8 @@ if os.path.isfile("packages.json"):
     with open("packages.json". "r") as file:
         contents = file.read()
 elif not os.path.isfile("packages.json"):
-    contents = requests.get("").json()
     with open("packages.json", "w") as file:
-        file.write(contents)
+        file.write(PACKAGES_JSON_STRUCTURE)
 
 if not sys.argv[1] or sys.argv[1] == "help":
     print(helpText)
