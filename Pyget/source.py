@@ -34,7 +34,7 @@ def searchForManifest(property, value):
     pass # For now
         
 if os.path.isfile("packages.json"):
-    with open("packages.json". "r") as file:
+    with open("packages.json", "r") as file:
         contents = file.read()
 elif not os.path.isfile("packages.json"):
     with open("packages.json", "w") as file:
