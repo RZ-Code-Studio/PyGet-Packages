@@ -10,29 +10,33 @@ def main():
     
     if not __from_terminal__:
         sys.stderr.write("MUST be ran from terminal")
+	sys.stderr.flush()
         sys.exit(1)
     else:
-		if sys.platform == "win32":
-			INSTALLDIR = "C:\\PyGet\\"
-		elif sys.platform == "linux" or sys.platform == "linux2" or sys:
-			INSTALLDIR = "/home/$(whoami)/PyGet"
-
-		contents = ""
-		helpText = """Must be supplied with arguments.
-
-		Arguments  Parameters Description
-		---------------------------------
-		upgrade   <package>    Upgrades <package>
-		install   <package>    Installs <package>
-		uninstall <package>    Uninstalls <package>
-		help                   Displays this message
-		"""
+	if sys.platform == "win32":
+		INSTALLDIR = "C:\\PyGet\\"
+	elif sys.platform == "linux" or sys.platform == "linux2" or sys.platform == "darwin":
+		INSTALLDIR = "/home/$(whoami)/PyGet"
+	else:
+		sys.stderr.write("Unsupported OS")
+		sys.stderr.flush()
+		sys.exit(1)
+		
+	contents = ""
+	helpText = """Must be supplied with arguments.
+Arguments  Parameters Description
+---------------------------------
+upgrade   <package>    Upgrades <package>
+install   <package>    Installs <package>		
+uninstall <package>    Uninstalls <package>
+help                   Displays this message
+"""
 
 		PACKAGES_JSON_STRUCTURE = """{
-			"pyget": {
-				"version": 1.0
-			}
-		}"""
+	"pyget": {
+		"version": 1.0
+	}
+}"""
 
 		def installPackageFromManifest(manifest, installDir):
 			sourceCode = requests.get(manifest["source"]).text
@@ -56,11 +60,9 @@ def main():
 			if not sys.argv[1] or sys.argv[1] == "help":
 				print(helpText)
 			else:
-				if sys.argv[1] == "install":
+				if sys.argv[1] == "install" or sys.argv[1] == "upgrade":
 					installPackageFromManifest(searchForManifest("id", sys.argv[2]), INSTALLDIR)
-				elif sys.argv[1] == "upgrade":
-					installPackageFromManifest(searchForManifest("id", sys.argv[2]), INSTALLDIR)
-				else:
+				elif sys.argv == "remove" or sys.argv == "uninstall":
 					uninstallPackage(sys.argv[2])
 		except IndexError:
 			print(helpText)
