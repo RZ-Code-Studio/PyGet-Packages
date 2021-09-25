@@ -16,7 +16,7 @@ def main():
 	if sys.platform == "win32":
 		INSTALLDIR = "C:\\PyGet\\"
 	elif sys.platform == "linux" or sys.platform == "linux2" or sys.platform == "darwin":
-		INSTALLDIR = "/home/$(whoami)/PyGet"
+		INSTALLDIR = "/home/$(whoami)/PyGet/"
 	else:
 		sys.stderr.write("Unsupported OS")
 		sys.stderr.flush()
