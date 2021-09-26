@@ -34,11 +34,9 @@ uninstall <package>    Uninstalls <package>
 help                   Displays this message
 """
 
-        def installPackageFromManifest(manifestURL, installPath):
+        def installPackageFromManifest(manifest, installPath):
             if not os.path.isdir(installPath + manifest["name"]):
                 os.system(f"mkdir {installPath + manifest['name']}")
-
-            manifest = requests.get(manifestURL).text
 
 			for dependency in manifest["dependencies"]:
 				installPackageFromManifest(dependency, INSTALLDIR)
