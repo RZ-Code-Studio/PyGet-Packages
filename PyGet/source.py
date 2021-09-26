@@ -75,8 +75,7 @@ help                   Displays this message
                 if sys.argv[1] == "install" or sys.argv[1] == "upgrade":
                     installPackageFromManifest(searchForManifest(), INSTALLDIR)
                 elif sys.argv[1] == "remove" or sys.argv[1] == "uninstall":
-                    uninstallPackage(sys.argv[2])
-                                
+                    uninstallPackage(sys.argv[2])                
         except IndexError:
             print(helpText)
 
