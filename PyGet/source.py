@@ -38,15 +38,17 @@ help                   Displays this message
             if not os.path.isdir(installPath + manifest["name"]):
                 os.system(f"mkdir {installPath + manifest['name']}")
 
+			sourceCode = requests.get(manifest["source"]).text
+			
 			for dependency in manifest["dependencies"]:
-				installPackageFromManifest(dependency, INSTALLDIR)
+				installPackageFromManifest(manifest, installPath)
 
             try:
 			    with open(installPath + manifest["name"] + "\\" + manifest["source"].split("/")[len(manifest["source"].split("/")) - 1], "wb") as file:
-                    file.write(manifest["source"])
+                    file.write(sourceCode)
             except:
                 with open(installPath + manifest["name"] + "\\" + manifest["source"].split("/")[len(manifest["source"].split("/")) - 1], "w") as file:
-                    file.write(manifest["source"])
+                    file.write(sourceCode)
                     
         def searchForManifest():
             manifest = requests.get(f"https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/{sys.argv[2]}/manifest.json").json()
