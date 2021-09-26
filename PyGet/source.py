@@ -2,6 +2,7 @@
 
 import os
 import sys
+import json
 import requests
 import shutil
 
@@ -23,24 +24,39 @@ def main():
             sys.stderr.flush()
             sys.exit(1)
 
-        contents = ""
-        helpText = """Must be supplied with arguments.
-Arguments  Parameters Description
+        helpText = """
+Arguments|Parameters|Description
 ---------------------------------
 upgrade   <package>    Upgrades <package>
 install   <package>    Installs <package>
 uninstall <package>    Uninstalls <package>
+remove    <package>    Alias for uninstall
+add       <package>    Alias for install
 help                   Displays this message
 """
+
+        def printHelpText(header):
+            print(header)
+            print(helpText)
 
         def installPackageFromManifest(manifest, installPath):
             if not os.path.isdir(installPath + manifest["name"]):
                 os.system(f"mkdir {installPath + manifest['name']}")
 
-            sourceCode = request.get(manifest["source"]).text
-			
+            sourceCode = requests.get(manifest["source"]).text
+
             for dependencyManifestURL in manifest["dependencies"]:
-                installPackageFromManifest(getManifest(dependencyManifestURL))
+                installPackageFromManifest(getManifest(
+                    dependencyManifestURL), installPath)
+
+            with open(f"{INSTALLDIR}packages.json", "r") as file:
+                data = json.load(file)
+
+            with open(f"{INSTALLDIR}packages.json", "w") as file:
+                if not manifest in data:
+                    data.append(manifest)
+
+                json.dump(data, file)
 
             try:
                 with open(installPath + manifest["name"] + "\\" + manifest["source"].split("/")[len(manifest["source"].split("/")) - 1], "wb") as file:
@@ -57,30 +73,50 @@ help                   Displays this message
             try:
                 shutil.rmtree(INSTALLDIR + theName)
             except:
-                print("The package isn't even installed")
-                        
-        if os.path.isfile(f"{INSTALLDIR}packages.json"):
+                sys.stderr.write("The package isn't even installed\n")
+                sys.stderr.flush()
+                sys.exit(1)
+            
             with open(f"{INSTALLDIR}packages.json", "r") as file:
-                contents = file.read()
-        elif not os.path.isfile(f"{INSTALLDIR}packages.json"):
-            print(os.path.isdir(INSTALLDIR))
-                
+                data = json.load(file)
+            
+            for key in data:
+                if key == theName:
+                    del theName[key]
+
+            with open(f"{INSTALLDIR}packages.json", "w") as file:
+                file.write(data)
+
+        if not os.path.isfile(f"{INSTALLDIR}packages.json"):
             if not os.path.isdir(INSTALLDIR):
                 os.system(f"mkdir {INSTALLDIR}")
-                
+
             with open(f"{INSTALLDIR}packages.json", "w") as file:
-                file.write("{\n    \"PyGet\"{\n        \"version\": 1.0\n    }\n}")
+                print(f"{INSTALLDIR}packages.json")
+                file.writelines([
+                    "{\n",
+                    "    \"pyget\": { \n",
+                    "        \"version\": 1.0,\n",
+                    "        \"source\": \"https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/PyGet/source.py\",\n",
+                    "        \"name\": \"PyGet\",\n", 
+                    "        \"dependencies\": []\n", 
+                    "    }\n", 
+                    "}"
+                ])
 
         try:
-            if not sys.argv[1] or sys.argv[1] == "help":
-                print(helpText)
+            if sys.argv[1] == "help":
+                printHelpText("Command Help")
+            elif not sys.argv[1]:
+                printHelpText("Must be supplied by arguments")
             else:
-                if sys.argv[1] == "install" or sys.argv[1] == "upgrade":
-                    installPackageFromManifest(getMainfest(f"https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/{sys.argv[2]}/manifest.json"), INSTALLDIR)
+                if sys.argv[1] == "install" or sys.argv[1] == "upgrade" or sys.argv[1] == "add":
+                    installPackageFromManifest(getManifest(
+                        f"https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/{sys.argv[2]}/manifest.json"), INSTALLDIR)
                 elif sys.argv[1] == "remove" or sys.argv[1] == "uninstall":
-                    uninstallPackage(sys.argv[2])                
+                    uninstallPackage(sys.argv[2])
         except IndexError:
-            print(helpText)
+            printHelpText("Must be supplied by arguments")
 
 if __name__ == "__main__":
     main()
