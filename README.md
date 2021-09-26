@@ -6,3 +6,5 @@ The packages for my package manager PyGet
 I NEED TO COMPILE FOR MAC AND LINUX. PROBABLY USING A VIRTUAL MACHINE.
 
 ## IMPORTANT: Windows Defender reports FALSE positives
+
+WHY DOES IT NOW REPORT ERRORS AFTER BEING FROZEN AS A EXE????
