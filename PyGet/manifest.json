@@ -2,7 +2,6 @@
     "id": "pyget",
     "version": 1.0,
     "source": "https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/PyGet/source.py",
-    "requirements": "https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/PyGet/requirements.txt",
     "name": "PyGet",
     "dependencies": []
 }
