@@ -99,7 +99,7 @@ help                   Displays this message
             
             for key in data:
                 if key == theName:
-                    del theName[key]
+                    del data[key]
 
             with open(f"{INSTALLDIR}packages.json", "w") as file:
                 file.write(json.dumps(str(data)))
