@@ -85,7 +85,7 @@ help                   Displays this message
                     del theName[key]
 
             with open(f"{INSTALLDIR}packages.json", "w") as file:
-                file.write(data)
+                file.write(json.dumps(str(data)))
 
         if not os.path.isfile(f"{INSTALLDIR}packages.json"):
             if not os.path.isdir(INSTALLDIR):
