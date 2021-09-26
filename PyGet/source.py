@@ -46,15 +46,32 @@ help                   Displays this message
             sourceCode = requests.get(manifest["source"]).text
 
             for dependencyManifestURL in manifest["dependencies"]:
-                installPackageFromManifest(getManifest(
-                    dependencyManifestURL), installPath)
+                installPackageFromManifest(getManifest(dependencyManifestURL), installPath)
 
             with open(f"{INSTALLDIR}packages.json", "r") as file:
-                data = json.load(file)
+                try:
+                    data = json.load(file)
+                except:
+                    with open(f"{INSTALLDIR}packages.json", "w") as file2:
+                        file2.writelines([
+                            "{\n",
+                            "    \"pyget\": { \n",
+                            "        \"version\": 1.0,\n",
+                            "        \"source\": \"https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/PyGet/source.py\",\n",
+                            "        \"name\": \"PyGet\",\n", 
+                            "        \"dependencies\": []\n", 
+                            "    }\n", 
+                            "}"
+                        ])
+                    
+                        with open(f"{INSTALLDIR}packages.json", "r") as file3:
+                            data = json.load(file3)
 
             with open(f"{INSTALLDIR}packages.json", "w") as file:
-                if not manifest in data:
-                    data.append(manifest)
+                isManifestInData = data | manifest == data
+
+                if not isManifestInData:
+                    data[manifest["name"]] = manifest
 
                 json.dump(data, file)
 
