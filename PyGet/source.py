@@ -2,7 +2,6 @@
 
 import os
 import sys
-import json
 import requests
 import shutil
 
@@ -38,20 +37,20 @@ help                   Displays this message
             if not os.path.isdir(installPath + manifest["name"]):
                 os.system(f"mkdir {installPath + manifest['name']}")
 
-	    sourceCode = requests.get(manifest["source"]).text
+            sourceCode = request.get(manifest["source"]).text
 			
-	    for dependency in manifest["dependencies"]:
-		installPackageFromManifest(manifest, installPath)
+            for dependencyManifestURL in manifest["dependencies"]:
+                installPackageFromManifest(getManifest(dependencyManifestURL))
 
             try:
-			    with open(installPath + manifest["name"] + "\\" + manifest["source"].split("/")[len(manifest["source"].split("/")) - 1], "wb") as file:
+                with open(installPath + manifest["name"] + "\\" + manifest["source"].split("/")[len(manifest["source"].split("/")) - 1], "wb") as file:
                     file.write(sourceCode)
             except:
                 with open(installPath + manifest["name"] + "\\" + manifest["source"].split("/")[len(manifest["source"].split("/")) - 1], "w") as file:
                     file.write(sourceCode)
-                    
-        def searchForManifest():
-            manifest = requests.get(f"https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/{sys.argv[2]}/manifest.json").json()
+
+        def getManifest(url):
+            manifest = requests.get(url).json()
             return manifest
 
         def uninstallPackage(theName):
@@ -62,7 +61,7 @@ help                   Displays this message
                         
         if os.path.isfile(f"{INSTALLDIR}packages.json"):
             with open(f"{INSTALLDIR}packages.json", "r") as file:
-            contents = file.read()
+                contents = file.read()
         elif not os.path.isfile(f"{INSTALLDIR}packages.json"):
             print(os.path.isdir(INSTALLDIR))
                 
@@ -77,7 +76,7 @@ help                   Displays this message
                 print(helpText)
             else:
                 if sys.argv[1] == "install" or sys.argv[1] == "upgrade":
-                    installPackageFromManifest(searchForManifest(), INSTALLDIR)
+                    installPackageFromManifest(getMainfest(f"https://raw.githubusercontent.com/RZ-Code-Studio/Pyget-Packages/main/{sys.argv[2]}/manifest.json"), INSTALLDIR)
                 elif sys.argv[1] == "remove" or sys.argv[1] == "uninstall":
                     uninstallPackage(sys.argv[2])                
         except IndexError:
