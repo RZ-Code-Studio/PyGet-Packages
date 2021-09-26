@@ -38,10 +38,10 @@ help                   Displays this message
             if not os.path.isdir(installPath + manifest["name"]):
                 os.system(f"mkdir {installPath + manifest['name']}")
 
-			sourceCode = requests.get(manifest["source"]).text
+	    sourceCode = requests.get(manifest["source"]).text
 			
-			for dependency in manifest["dependencies"]:
-				installPackageFromManifest(manifest, installPath)
+	    for dependency in manifest["dependencies"]:
+		installPackageFromManifest(manifest, installPath)
 
             try:
 			    with open(installPath + manifest["name"] + "\\" + manifest["source"].split("/")[len(manifest["source"].split("/")) - 1], "wb") as file:
