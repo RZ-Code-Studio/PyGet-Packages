@@ -3,12 +3,14 @@
     "sources":[
         {
             "source": "https://github.com/To-Code-Or-Not-To-Code/PyGet-Packages/blob/main/Windows/PyGet/PyGet.exe",
-            "compile": false
+            "compile": false,
+            "priority": 0
         },
         {
             "https://github.com/To-Code-Or-Not-To-Code/PyGet-Packages/blob/main/Windows/PyGet/PyGet.exe"
             "compile": true,
-            "language": "Python"
+            "language": "Python",
+            "priority": 1
         }
      ],
     "name":"PyGet",
